@@ -3,17 +3,18 @@ from datetime import datetime
 import cv2
 import face_recognition
 import numpy as np
+import os
 
 # Initialize the camera_active flag
 camera_active = False
 
-def run_face_recognition():
+def run_face_recognition(script_path):
     global camera_active
 
-    video_capture = cv2.VideoCapture(0)
-    aastha_image = face_recognition.load_image_file("C:\\Users\\DELL\\Desktop\\backend\\static\\photos\\aastha.jpeg")
+    video_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    aastha_image = face_recognition.load_image_file(os.path.join(script_path, "static", "photos", "aastha.jpeg"))
     aastha_encoding = face_recognition.face_encodings(aastha_image)[0]
-    tesla_image = face_recognition.load_image_file("C:\\Users\\DELL\\Desktop\\backend\\static\\photos\\tesla.jpeg")
+    tesla_image = face_recognition.load_image_file(os.path.join(script_path, "static", "photos", "tesla.jpeg"))
     tesla_encoding = face_recognition.face_encodings(tesla_image)[0]
 
     known_face_encoding = [aastha_encoding, tesla_encoding]
@@ -26,7 +27,7 @@ def run_face_recognition():
     now = datetime.now()
     current_date = now.strftime("%Y-%m-%d")
 
-    f = open(current_date + '.csv', 'w+', newline='')
+    f = open(os.path.join(script_path, current_date + '.csv'), 'w+', newline='')
     lnwriter = csv.writer(f)
 
     while camera_active:
